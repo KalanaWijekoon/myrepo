@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <title>Map Test</title>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.min.js"></script>-->
+    <script src="d3/d3.js"></script>
+  </head>
+  <body>
+
+    <script> 
+      var canvas = d3.select("body").append("svg")
+               .attr("width",1000)
+               .attr("height",600);
+
+      d3.json("countries.geo.json", function(data){
+        var group =canvas.selectAll("g").data(data.features).enter().append("g");
+
+        var projection = d3.geoMercator();
+        var path = d3.geoPath().projection(projection);
+
+        var areas = group.append("path")
+                         .attr("d", path)
+                         .attr("class","area")
+                         .attr("fill","steelblue");
+
+        function render(datas){
+        //Bind data
+        var circles = canvas.selectAll("circle").data(datas);
+        //Enter
+        circles.enter().append("circle")
+                       .attr("r",5)
+                       .attr("cx",function(d){return d.x;})
+                       .attr("cy",function(d){return d.y});
+        //Exit
+        circles.exit().remove();
+
+      }
+
+      var myArray = [
+                     {x:52.25, y:20.55},
+                     {x:75.25, y:33.53},
+                     {x:60.25, y:12.12},
+                     {x:45.25, y:56.12},
+                     {x:25.25, y:54.01},
+                     {x:33.25, y:66.45},
+                     {x:45.25, y:30.55},
+                     {x:55.25, y:23.52}
+                     ];
+
+      render(myArray);
+
+      });
+
+
+
+    </script>
+
+
+  </body>
+</html> 
